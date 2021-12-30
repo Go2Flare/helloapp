@@ -13,7 +13,7 @@ func main() {
 		firstname := c.DefaultQuery("firstname", "Guest")
 		lastname := c.Query("lastname") // 是 c.Request.URL.Query().Get("lastname") 的简写
 
-		c.String(http.StatusOK, "HeiHei %s %s", firstname, lastname)
+		c.String(http.StatusOK, "HeiHeiHeiHei %s %s", firstname, lastname)
 	})
 	router.Run(":80")
 }
