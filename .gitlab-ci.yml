@@ -11,11 +11,13 @@ build_image:
  stage: build_image
  script:
   - docker build --pull -t "helloapp:1.0" .
+  
 push_image:
  stage: push_image
  script:
-  - docker push "helloapp:latest"
-  - docker rmi "helloapp:latest"
+#   - docker tag "helloap" 
+  - docker push "helloapp:1.0"
+  - docker rmi "helloapp:1.0"
 # build-job:
 #  stage: build
 #  tags:
