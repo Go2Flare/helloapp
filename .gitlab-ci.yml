@@ -10,8 +10,7 @@ before_script:
 build_image:
  stage: build_image
  script:
-  - docker build --pull -t "helloapp:latest" .
-  
+  - docker build --pull -t "helloapp:1.0" .
 push_image:
  stage: push_image
  script:
