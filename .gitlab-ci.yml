@@ -1,21 +1,40 @@
 image: node:alpine
 stages:
- - build
-#  - push
+ - build_image
+ - push_image
  
-build-job:
- stage: build
- tags:
-  - test-runner
- image: docker
+before_script:
+ - docker info
+ - docker login -u "admin" -p "daocloud" 10.7.253.201
+ 
+build_image:
+ stage: build_image
  script:
-  - docker build -t helloapp .
-  - if [ $(docker ps -aq --filter name=helloapp) ]; then docker rm -f helloapp;fi
-  - docker run -d -p 8080:80 helloapp 
+  - docker build --pull -t "helloapp:latest" .
+  
+push_image:
+ stage: push_image
+ script:
+  - docker push "helloapp:latest"
+  - docker rmi "helloapp:latest"
+# build-job:
+#  stage: build
+#  tags:
+#   - test-runner
+#  image: docker
+#  script:
+#   - docker build -t helloapp .
+# #   如果容器存在，删除原来的容器
+#   - if [ $(docker ps -aq --filter name=helloapp) ]; then docker rm -f helloapp;fi
+#   - docker run -d -p 8080:80 helloapp 
 
 # push-job:
 #  stage: push
-#   tags:
+#  tags:
+#   - test-runner
+#  image: docker
+#  script:
+#   - docker save -o 
   
 # ## 构建镜像
 # .build-docker:
