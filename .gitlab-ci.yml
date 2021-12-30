@@ -1,10 +1,27 @@
-image: node:alpine
-    job_deploy:
-        stage: deploy
-        image: docker
-        tags:
-            - vite
-        script:
-            - docker build -t helloapp .
-            - if [ $(docker ps -aq --filter name=myvite-container) ]; then docker rm -f myvite-container;fi
-            - docker run -d -p 8080:80 --name 
+# image: node:alpine
+#     job_deploy:
+#         stage: deploy
+#         image: docker
+#         tags:
+#             - vite
+#         script:
+            # - docker build -t helloapp .
+            # - if [ $(docker ps -aq --filter name=myvite-container) ]; then docker rm -f myvite-container;fi
+            # - docker run -d -p 8080:80 --name 
+
+## 构建镜像
+.build-docker:
+  stage: buildimage
+  script:
+    # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWD  $CI_REGISTRY
+    # - docker build -t ${IMAGE_NAME} -f ${DOCKER_FILE_PATH} .
+    # - docker push ${IMAGE_NAME} 
+    # - docker rmi ${IMAGE_NAME} 
+    - docker login -u admin -p daocloud  10.7.253.201
+    - docker build -t helloapp -f ${DOCKER_FILE_PATH} .
+    - docker push ${IMAGE_NAME} 
+    - docker rmi ${IMAGE_NAME} 
+  rules:
+    - if: " $RUN_BUILD_IMAGE == 'no' "
+      when: never
+    - when: always
