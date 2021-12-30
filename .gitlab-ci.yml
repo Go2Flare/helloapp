@@ -1,27 +1,10 @@
-docker-build:
-  # Use the official docker image.
-  image: docker:latest
-  stage: build
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u "admin" -p "daocloud" 10.7.253.201
-  # Default branch leaves tag empty (= latest tag)
-  # All other branches are tagged with the escaped branch name (commit ref slug)
-#   script:
-#     - |
-#       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-#         tag=""
-#         echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-#       else
-#         tag=":$CI_COMMIT_REF_SLUG"
-#         echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-#       fi
-    - docker build --pull -t "helloapp{1.0}" .
-    - docker push "helloapp${tag}"
-  # Run this job in a branch where a Dockerfile exists
-  rules:
-    - if: $CI_COMMIT_BRANCH
-      exists:
-        - Dockerfile
-
+image: node:alpine
+    job_deploy:
+        stage: deploy
+        image: docker
+        tags:
+            - vite
+        script:
+            - docker build -t helloapp .
+            - if [ $(docker ps -aq --filter name=myvite-container) ]; then docker rm -f myvite-container;fi
+            - docker run -d -p 8080:80 --name 
